@@ -71,6 +71,7 @@ C:\Users\Hurera1011\Desktop\LibraryManagementSystem\LibraryManagementSystem\obj\
 C:\Users\Hurera1011\Desktop\LibraryManagementSystem\LibraryManagementSystem\obj\Debug\net8.0\LibraryManagementSystem.csproj.CoreCompileInputs.cache
 C:\Users\Hurera1011\Desktop\LibraryManagementSystem\LibraryManagementSystem\obj\Debug\net8.0\LibraryManagementSystem.MvcApplicationPartsAssemblyInfo.cs
 C:\Users\Hurera1011\Desktop\LibraryManagementSystem\LibraryManagementSystem\obj\Debug\net8.0\LibraryManagementSystem.MvcApplicationPartsAssemblyInfo.cache
+C:\Users\Hurera1011\Desktop\LibraryManagementSystem\LibraryManagementSystem\obj\Debug\net8.0\LibraryManagementSystem.sourcelink.json
 C:\Users\Hurera1011\Desktop\LibraryManagementSystem\LibraryManagementSystem\obj\Debug\net8.0\scopedcss\bundle\LibraryManagementSystem.styles.css
 C:\Users\Hurera1011\Desktop\LibraryManagementSystem\LibraryManagementSystem\obj\Debug\net8.0\staticwebassets.build.json
 C:\Users\Hurera1011\Desktop\LibraryManagementSystem\LibraryManagementSystem\obj\Debug\net8.0\staticwebassets.development.json

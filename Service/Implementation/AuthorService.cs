@@ -1,4 +1,4 @@
-﻿using LibraryManagementSystem.DTO;
+﻿using LibraryManagementSystem.DTO.Author;
 using LibraryManagementSystem.Repository.Interfaces;
 using LibraryManagementSystem.Service.Interfaces;
 
@@ -13,22 +13,22 @@ namespace LibraryManagementSystem.Service.Implementation
             _authorRepository = authorRepository;
         }
 
-        public async Task Add(AuthorDto author)
+        public async Task Add(CreateAuthorDto author)
         {
             await _authorRepository.Add(author);
         }
 
-        public Task Delete(int author_id)
+        public async Task Delete(int author_id)
         {
-            throw new NotImplementedException();
+            await _authorRepository.Delete(author_id);
         }
 
-        public Task<AuthorDto> GetById(int author_id)
+        public async Task<GetAuthorDto> GetById(int author_id)
         {
-            throw new NotImplementedException();
+            return await _authorRepository.GetById(author_id);
         }
 
-        public Task Update(int id, AuthorDto author)
+        public Task Update(int id, CreateAuthorDto author)
         {
             throw new NotImplementedException();
         }

@@ -14,7 +14,7 @@ namespace LibraryManagementSystem.Models
         [MaxLength(100)]
         public string? last_name { get; set; }
         [Required]
-        public DateOnly dob { get; set; }
+        public DateTime dob { get; set; }
         [Required]
         [MaxLength(100)]
         public string? nationality { get; set; }

@@ -14,21 +14,61 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/AuthorDto"
+                "$ref": "#/components/schemas/CreateAuthorDto"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/AuthorDto"
+                "$ref": "#/components/schemas/CreateAuthorDto"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/AuthorDto"
+                "$ref": "#/components/schemas/CreateAuthorDto"
               }
             }
           }
         },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Author"
+        ],
+        "parameters": [
+          {
+            "name": "author_id",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Author"
+        ],
+        "parameters": [
+          {
+            "name": "author_id",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "OK"
@@ -201,34 +241,6 @@
   },
   "components": {
     "schemas": {
-      "AuthorDto": {
-        "required": [
-          "dob",
-          "first_name",
-          "last_name",
-          "nationality"
-        ],
-        "type": "object",
-        "properties": {
-          "first_name": {
-            "minLength": 1,
-            "type": "string"
-          },
-          "last_name": {
-            "minLength": 1,
-            "type": "string"
-          },
-          "dob": {
-            "type": "string",
-            "format": "date"
-          },
-          "nationality": {
-            "minLength": 1,
-            "type": "string"
-          }
-        },
-        "additionalProperties": false
-      },
       "BookDto": {
         "required": [
           "author_id",
@@ -269,6 +281,34 @@
         "type": "object",
         "properties": {
           "category_name": {
+            "minLength": 1,
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "CreateAuthorDto": {
+        "required": [
+          "dob",
+          "first_name",
+          "last_name",
+          "nationality"
+        ],
+        "type": "object",
+        "properties": {
+          "first_name": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "last_name": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "dob": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "nationality": {
             "minLength": 1,
             "type": "string"
           }

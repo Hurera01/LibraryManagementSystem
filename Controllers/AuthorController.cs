@@ -1,4 +1,4 @@
-﻿using LibraryManagementSystem.DTO;
+﻿using LibraryManagementSystem.DTO.Author;
 using LibraryManagementSystem.Service.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -18,13 +18,12 @@ namespace LibraryManagementSystem.Controllers
 
         // POST api/author
         [HttpPost]
-        public async Task<IActionResult> CreateAuthor([FromBody] AuthorDto author)
+        public async Task<IActionResult> CreateAuthor([FromBody] CreateAuthorDto author)
         {
-            if (author == null)
+            if (!ModelState.IsValid)
             {
-                return BadRequest("Author object is null.");
+                return BadRequest(ModelState);
             }
-
             try
             {
                 await _authorService.Add(author);
@@ -32,6 +31,43 @@ namespace LibraryManagementSystem.Controllers
                 return Ok(new { message = "Author created successfully." });
             }
             catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
+
+        [HttpDelete]
+        public async Task<IActionResult> DeleteAuthor(int author_id)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            try
+            {
+                await _authorService.Delete(author_id);
+
+                return Ok(new { message = "Author Deleted Successfully." });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetById(int author_id)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            try
+            {
+                var result = await _authorService.GetById(author_id);
+                return Ok(new { message = "Author Retrieved Successfully.", data = result});
+            }
+            catch(Exception ex)
             {
                 return StatusCode(500, $"Internal server error: {ex.Message}");
             }

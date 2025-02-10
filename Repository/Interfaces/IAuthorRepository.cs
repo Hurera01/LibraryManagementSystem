@@ -1,12 +1,12 @@
-﻿using LibraryManagementSystem.DTO;
+﻿using LibraryManagementSystem.DTO.Author;
 
 namespace LibraryManagementSystem.Repository.Interfaces
 {
     public interface IAuthorRepository
     {
-        Task Add(AuthorDto author);
-        Task<AuthorDto> GetById(int author_id);
-        Task Update(int id, AuthorDto author);
+        Task Add(CreateAuthorDto author);
+        Task<GetAuthorDto> GetById(int author_id);
+        Task Update(int id, CreateAuthorDto author);
         Task Delete(int author_id);
     }
 }

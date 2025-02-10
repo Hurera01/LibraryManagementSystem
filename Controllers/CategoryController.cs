@@ -19,10 +19,6 @@ namespace LibraryManagementSystem.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateCategory([FromBody] CategoryDto category)
         {
-            if (category == null)
-            {
-                return BadRequest("Category Object is null.");
-            }
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);

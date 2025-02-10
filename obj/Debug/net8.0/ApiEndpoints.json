@@ -9,8 +9,40 @@
     "Parameters": [
       {
         "Name": "author",
-        "Type": "LibraryManagementSystem.DTO.AuthorDto",
+        "Type": "LibraryManagementSystem.DTO.Author.CreateAuthorDto",
         "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "LibraryManagementSystem.Controllers.AuthorController",
+    "Method": "DeleteAuthor",
+    "RelativePath": "api/Author",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "author_id",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "LibraryManagementSystem.Controllers.AuthorController",
+    "Method": "GetById",
+    "RelativePath": "api/Author",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "author_id",
+        "Type": "System.Int32",
+        "IsRequired": false
       }
     ],
     "ReturnTypes": []
