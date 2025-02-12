@@ -6,7 +6,7 @@ namespace LibraryManagementSystem.Service.Interfaces
     {
         Task Add(CreateAuthorDto author);
         Task<GetAuthorDto> GetById(int author_id);
-        Task Update(int id, CreateAuthorDto author);
+        Task<UpdateAuthorDto> Update(int id, CreateAuthorDto author);
         Task Delete(int author_id);
     }
 }

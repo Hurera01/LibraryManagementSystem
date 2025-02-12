@@ -28,9 +28,9 @@ namespace LibraryManagementSystem.Service.Implementation
             return await _authorRepository.GetById(author_id);
         }
 
-        public Task Update(int id, CreateAuthorDto author)
+        public async Task<UpdateAuthorDto> Update(int id, CreateAuthorDto author)
         {
-            throw new NotImplementedException();
+            return await _authorRepository.Update(id, author);
         }
     }
 }

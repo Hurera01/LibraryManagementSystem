@@ -16,6 +16,7 @@ namespace LibraryManagementSystem.Data
         public DbSet<Categories> Categories { get; set; }
         public DbSet<Members> Members { get; set; }
         public DbSet<Book_Category> Book_Categories { get; set; }
+        public DbSet<User> Users { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -46,6 +47,9 @@ namespace LibraryManagementSystem.Data
                 .HasOne(m => m.Members)
                 .WithMany(l => l.Loans)
                 .HasForeignKey(l => l.member_id);
+
+            modelBuilder.Entity<User>()
+                .HasKey(e => e.UserId);
         }
     }
 }

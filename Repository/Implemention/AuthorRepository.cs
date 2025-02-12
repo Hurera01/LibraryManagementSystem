@@ -126,11 +126,59 @@ namespace LibraryManagementSystem.Repository.Implemention
             }
         }
 
-        public Task Update(int id, CreateAuthorDto author)
+        public async Task<UpdateAuthorDto> Update(int author_id, CreateAuthorDto author)
         {
-            //string storedProcedure = $"EXEC UpdateAuthor @p_author_id ,@p_first_name, @p_last_name, @p_dob, @p_nationality, @StatusCode OUTPUT, @Message OUTPUT";
-            throw new NotImplementedException();
+            try
+            {
+                string storedProcedure = $"EXEC UpdateAuthor @p_author_id ,@Authors , @StatusCode OUTPUT, @Message OUTPUT";
+                var authorIdParam = new SqlParameter("@p_author_id", SqlDbType.Int) { Value = author_id };
+                var authorTable = new DataTable();
+                authorTable.Columns.Add("first_name", typeof(string));
+                authorTable.Columns.Add("last_name", typeof(string));
+                authorTable.Columns.Add("dob", typeof(DateTime));
+                authorTable.Columns.Add("nationality", typeof(string));
 
+                authorTable.Rows.Add(author.first_name, author.last_name, author.dob, author.nationality);
+
+                var authorParam = new SqlParameter("@Authors", SqlDbType.Structured)
+                {
+                    TypeName = "dbo.AuthorType",
+                    Value = authorTable
+                };
+
+                // Output parameters
+                var statusCodeParam = new SqlParameter("@StatusCode", System.Data.SqlDbType.Int) { Direction = System.Data.ParameterDirection.Output };
+                var messageParam = new SqlParameter("@Message", System.Data.SqlDbType.NVarChar, 255) { Direction = System.Data.ParameterDirection.Output };
+
+                await _context.Database.ExecuteSqlRawAsync(storedProcedure, authorIdParam, authorParam, statusCodeParam, messageParam);
+
+                var statusCode = statusCodeParam.Value;
+                var message = messageParam.Value.ToString();
+
+
+                if ((int)statusCode != 0)
+                {
+                    throw new Exception($"Error Updating Author: {message}");
+                }
+
+                var updatedAuthor = await _context.Authors.Where(a => a.author_id == author_id)
+                    .FirstOrDefaultAsync();
+
+                var updatedAuthorDto = new UpdateAuthorDto
+                {
+                    author_id = updatedAuthor.author_id,
+                    first_name = updatedAuthor.first_name,
+                    last_name = updatedAuthor.last_name,
+                    dob = updatedAuthor.dob,
+                    nationality = updatedAuthor.nationality
+                };
+
+                return updatedAuthorDto;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error updating Author: {ex.Message}");
+            }
 
         }
 
