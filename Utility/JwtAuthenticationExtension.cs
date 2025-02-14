@@ -37,17 +37,16 @@ namespace LibraryManagementSystem.Utility
                     ValidateAudience = true,
                     ValidAudience = audience,
                     ValidateLifetime = true,
-                    ClockSkew = TimeSpan.Zero // Ensures token expires at exact time
+                    ClockSkew = TimeSpan.Zero 
                 };
 
-                // Custom Unauthorized & Expired Token Response
                 options.Events = new JwtBearerEvents
                 {
                     OnChallenge = async context =>
                     {
-                        if (!context.Response.HasStarted) // ✅ Prevent error
+                        if (!context.Response.HasStarted)
                         {
-                            context.HandleResponse(); // Prevent default response
+                            context.HandleResponse(); 
                             context.Response.StatusCode = StatusCodes.Status401Unauthorized;
                             context.Response.ContentType = "application/json";
 
@@ -65,9 +64,9 @@ namespace LibraryManagementSystem.Utility
                         if (context.Exception.GetType() == typeof(SecurityTokenExpiredException))
                         {
                             var response = context.Response;
-                            if (!response.HasStarted) // ✅ Prevent error
+                            if (!response.HasStarted) 
                             {
-                                context.Response.Clear(); // ✅ Clear any partial response
+                                context.Response.Clear(); 
                                 context.Response.StatusCode = StatusCodes.Status401Unauthorized;
                                 context.Response.ContentType = "application/json";
 

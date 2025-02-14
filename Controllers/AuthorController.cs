@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace LibraryManagementSystem.Controllers
 {
-    [Authorize]
+    //[Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class AuthorController : ControllerBase
@@ -20,7 +20,7 @@ namespace LibraryManagementSystem.Controllers
 
         // POST api/author
         [HttpPost]
-        [Authorize(Roles = "Admin, Librarian")]
+        //[Authorize(Roles = "Admin, Librarian")]
         public async Task<IActionResult> CreateAuthor([FromBody] CreateAuthorDto author)
         {
             if (!ModelState.IsValid)

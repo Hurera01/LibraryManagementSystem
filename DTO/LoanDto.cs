@@ -12,7 +12,6 @@ namespace LibraryManagementSystem.DTO
         public DateOnly loan_date { get; set; }
         [Required]
         public DateOnly due_date { get; set; }
-        [Required]
         public DateOnly return_date { get; set; }
     }
 }

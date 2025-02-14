@@ -1,6 +1,7 @@
 ﻿using System.Data;
 using LibraryManagementSystem.Data;
 using LibraryManagementSystem.DTO.Author;
+using LibraryManagementSystem.DTO.Book;
 using LibraryManagementSystem.Models;
 using LibraryManagementSystem.Repository.Interfaces;
 using Microsoft.Data.SqlClient;
@@ -85,6 +86,7 @@ namespace LibraryManagementSystem.Repository.Implemention
                 throw new Exception($"Error deleting Author: {ex.Message}");
             }
         }
+
 
         public async Task<GetAuthorDto> GetById(int author_id)
         {

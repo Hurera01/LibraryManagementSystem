@@ -8,5 +8,6 @@ namespace LibraryManagementSystem.Service.Interfaces
         Task<GetAuthorDto> GetById(int author_id);
         Task<UpdateAuthorDto> Update(int id, CreateAuthorDto author);
         Task Delete(int author_id);
+
     }
 }

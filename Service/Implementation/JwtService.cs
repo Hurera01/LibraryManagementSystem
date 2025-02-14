@@ -41,7 +41,7 @@ namespace LibraryManagementSystem.Service.Implementation
                 issuer: issuer,
                 audience: audience,
                 claims: claims,
-                expires: DateTime.UtcNow.AddSeconds(50),
+                expires: DateTime.UtcNow.AddHours(2),
                 signingCredentials: credentials
             );
 

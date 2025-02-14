@@ -1,6 +1,7 @@
-﻿using LibraryManagementSystem.DTO;
+﻿using LibraryManagementSystem.DTO.Book;
 using LibraryManagementSystem.Repository.Interfaces;
 using LibraryManagementSystem.Service.Interfaces;
+using LibraryManagementSystem.Utility;
 
 namespace LibraryManagementSystem.Service.Implementation
 {
@@ -18,9 +19,19 @@ namespace LibraryManagementSystem.Service.Implementation
             await _bookRepository.Add(book);
         }
 
+        public Task<int> AddMultipleBooks(List<BookDto> books)
+        {
+            return _bookRepository.AddMultipleBooks(books);
+        }
+
         public Task Delete(int book_id)
         {
             throw new NotImplementedException();
+        }
+
+        public Task<Response<GetBookWithAuthorDto>> GetBookWithAuthor(int book_id)
+        {
+            return _bookRepository.GetBookWithAuthor(book_id);
         }
 
         public Task<BookDto> GetById(int book_id)

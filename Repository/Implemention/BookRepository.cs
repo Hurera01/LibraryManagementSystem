@@ -1,9 +1,11 @@
-﻿using LibraryManagementSystem.Data;
-using LibraryManagementSystem.DTO;
-using LibraryManagementSystem.Models;
+﻿using Dapper;
+using LibraryManagementSystem.Data;
+using LibraryManagementSystem.DTO.Book;
 using LibraryManagementSystem.Repository.Interfaces;
+using LibraryManagementSystem.Utility;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
+using System.Data;
 
 namespace LibraryManagementSystem.Repository.Implemention
 {
@@ -18,17 +20,18 @@ namespace LibraryManagementSystem.Repository.Implemention
 
         public async Task Add(BookDto book)
         {
-            string storedProcedure = $"EXEC CreateBook @p_title, @p_author_id, @p_genre, @p_publish_year, @StatusCode OUTPUT, @Message OUTPUT";
+            string storedProcedure = $"EXEC CreateBook @p_title, @p_author_id, @p_genre, @p_publish_year, @p_isbn, @StatusCode OUTPUT, @Message OUTPUT";
 
             var titleParam = new SqlParameter("@p_title", book.Title);
             var authorIdParam = new SqlParameter("@p_author_id", book.author_id);
             var genreParam = new SqlParameter("@p_genre", book.genre);
-            var publishYearParam = new SqlParameter("p_publish_year", book.publish_year);
+            var publishYearParam = new SqlParameter("@p_publish_year", book.publish_year);
+            var isbnParam = new SqlParameter("@p_isbn", book.publish_year);
 
             var statusCodeParam = new SqlParameter("@StatusCode", System.Data.SqlDbType.Int) { Direction = System.Data.ParameterDirection.Output };
             var messageParam = new SqlParameter("@Message", System.Data.SqlDbType.NVarChar, 255) { Direction = System.Data.ParameterDirection.Output };
 
-            await _context.Database.ExecuteSqlRawAsync(storedProcedure, titleParam, authorIdParam, genreParam, publishYearParam, statusCodeParam, messageParam);
+            await _context.Database.ExecuteSqlRawAsync(storedProcedure, titleParam, authorIdParam, genreParam, publishYearParam, isbnParam,statusCodeParam, messageParam);
 
             var statusCode = statusCodeParam.Value;
             var message = messageParam.Value;
@@ -52,6 +55,45 @@ namespace LibraryManagementSystem.Repository.Implemention
         public Task<BookDto> GetById(int book_id)
         {
             throw new NotImplementedException();
+        }
+
+        public async Task<Response<GetBookWithAuthorDto>> GetBookWithAuthor(int book_id)
+        {
+            using var connection = _context.Database.GetDbConnection();
+            await connection.OpenAsync(); // Explicitly open the connection
+
+            var param = new { p_book_id = book_id };
+
+            var result = await connection.QueryFirstOrDefaultAsync<GetBookWithAuthorDto>(
+                "dbo.GetBookWithAuthors",
+                param: param,
+                commandType: CommandType.StoredProcedure
+            );
+
+            return ResponseHelper.SuccessResponse(result);
+        }
+
+        public async Task<int> AddMultipleBooks(List<BookDto> books)
+        {
+            using var connection = _context.Database.GetDbConnection();
+            await connection.OpenAsync();
+
+            // Convert books list to DataTable
+            var bookTable = new DataTable();
+            bookTable.Columns.Add("Title", typeof(string));
+            bookTable.Columns.Add("genre", typeof(string));
+            bookTable.Columns.Add("publish_year", typeof(int));
+            bookTable.Columns.Add("author_id", typeof(int));
+            bookTable.Columns.Add("isbn", typeof(string));
+
+            books.ForEach(book => bookTable.Rows.Add(book.Title, book.genre, book.publish_year, book.author_id, book.isbn));
+
+            var parameters = new DynamicParameters();
+            parameters.Add("@Books", bookTable.AsTableValuedParameter("dbo.BookTableType"));
+
+            await connection.ExecuteAsync("InsertMultipleBooks", parameters, commandType: CommandType.StoredProcedure);
+
+            return books.Count;
         }
     }
 }
