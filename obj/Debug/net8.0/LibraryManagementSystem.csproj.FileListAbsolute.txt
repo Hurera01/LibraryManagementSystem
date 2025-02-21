@@ -175,3 +175,5 @@ C:\Users\Hurera1011\Desktop\LibraryManagementSystem\LibraryManagementSystem\obj\
 C:\Users\Hurera1011\Desktop\LibraryManagementSystem\LibraryManagementSystem\obj\Debug\net8.0\LibraryManagementSystem.pdb
 C:\Users\Hurera1011\Desktop\LibraryManagementSystem\LibraryManagementSystem\obj\Debug\net8.0\LibraryManagementSystem.genruntimeconfig.cache
 C:\Users\Hurera1011\Desktop\LibraryManagementSystem\LibraryManagementSystem\obj\Debug\net8.0\ref\LibraryManagementSystem.dll
+C:\Users\Hurera1011\Desktop\LibraryManagementSystem\LibraryManagementSystem\bin\Debug\net8.0\Pipelines.Sockets.Unofficial.dll
+C:\Users\Hurera1011\Desktop\LibraryManagementSystem\LibraryManagementSystem\bin\Debug\net8.0\StackExchange.Redis.dll

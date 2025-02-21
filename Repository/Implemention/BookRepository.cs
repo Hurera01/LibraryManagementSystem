@@ -52,9 +52,18 @@ namespace LibraryManagementSystem.Repository.Implemention
             throw new NotImplementedException();
         }
 
-        public Task<BookDto> GetById(int book_id)
+        public async Task<BookDto> GetById(int book_id)
         {
-            throw new NotImplementedException();
+            var book = await _context.books.FindAsync(book_id);
+            var bookDto = new BookDto()
+            {
+                Title = book.Title,
+                author_id = book.author_id,
+                genre = book.genre,
+                publish_year = book.publish_year,
+                isbn = book.isbn,
+            };
+            return bookDto;
         }
 
         public async Task<Response<GetBookWithAuthorDto>> GetBookWithAuthor(int book_id)

@@ -55,6 +55,25 @@ namespace LibraryManagementSystem.Controllers
             }
 
         }
+        
+        [HttpGet("GetBookById")]
+        public async Task<IActionResult> GetBookById(int book_id)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+                var result = await _bookService.GetById(book_id);
+                return Ok(new { message = "Retrieve book with author successfully", data = result });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+
+        }
 
         [HttpPost("AddMultipleBooks")]
         public async Task<IActionResult> AddMultipleBooks([FromBody] List<BookDto> books)
