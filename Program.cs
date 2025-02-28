@@ -11,29 +11,43 @@ using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+// Add CORS services
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAllOrigins", policy =>
+    {
+        policy.AllowAnyOrigin()  // Allow any origin
+            .AllowAnyHeader()  // Allow any header
+            .AllowAnyMethod(); // Allow any HTTP method
+    });
+});
+
+// Add services to the container
 builder.Services.AddControllers();
 
 // Add Swagger services
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+// Add DbContext
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"))
 );
 
+// Register custom services and repositories
 builder.Services.RegisterServices();
 builder.Services.AddScoped<JwtService>();
 builder.Services.RegisterRepositories();
 
-// Read the JWT Secret Key from Environment Variable
+// Configure JWT Authentication
 builder.Services.AddJwtAuthentication(builder.Configuration);
 
+// Add Authorization and other necessary services
 builder.Services.AddAuthorization();
 builder.Services.AddMemoryCache();
-builder.Services.AddSingleton<IConnectionMultiplexer>(
-    ConnectionMultiplexer.Connect("localhost:6379"));
 
+// Add Redis Cache Service
+builder.Services.AddSingleton<IConnectionMultiplexer>(ConnectionMultiplexer.Connect("localhost:6379"));
 
 // Configure Swagger to accept JWT tokens
 builder.Services.AddSwaggerGen(options =>
@@ -66,6 +80,9 @@ builder.Services.AddSwaggerGen(options =>
 
 var app = builder.Build();
 
+// Use CORS middleware before other middleware
+app.UseCors("AllowAllOrigins"); // Apply CORS policy
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
@@ -75,13 +92,12 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
-
 app.UseAuthentication(); // Add Authentication Middleware
+app.UseAuthorization();  // Add Authorization Middleware
 
+// Custom Middleware (optional)
 app.UseMiddleware<ForbiddenResponseMiddleware>();
-app.UseAuthorization();
 
-app.MapControllers();
+app.MapControllers(); // Map Controllers
 
-app.Run();
+app.Run(); // Run the application

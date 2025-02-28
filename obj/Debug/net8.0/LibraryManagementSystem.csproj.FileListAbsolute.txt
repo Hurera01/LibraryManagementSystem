@@ -168,7 +168,6 @@ C:\Users\Hurera1011\Desktop\LibraryManagementSystem\LibraryManagementSystem\obj\
 C:\Users\Hurera1011\Desktop\LibraryManagementSystem\LibraryManagementSystem\obj\Debug\net8.0\staticwebassets\msbuild.buildMultiTargeting.LibraryManagementSystem.props
 C:\Users\Hurera1011\Desktop\LibraryManagementSystem\LibraryManagementSystem\obj\Debug\net8.0\staticwebassets\msbuild.buildTransitive.LibraryManagementSystem.props
 C:\Users\Hurera1011\Desktop\LibraryManagementSystem\LibraryManagementSystem\obj\Debug\net8.0\staticwebassets.pack.json
-C:\Users\Hurera1011\Desktop\LibraryManagementSystem\LibraryManagementSystem\obj\Debug\net8.0\staticwebassets.upToDateCheck.txt
 C:\Users\Hurera1011\Desktop\LibraryManagementSystem\LibraryManagementSystem\obj\Debug\net8.0\LibraryM.4D120AE7.Up2Date
 C:\Users\Hurera1011\Desktop\LibraryManagementSystem\LibraryManagementSystem\obj\Debug\net8.0\LibraryManagementSystem.dll
 C:\Users\Hurera1011\Desktop\LibraryManagementSystem\LibraryManagementSystem\obj\Debug\net8.0\refint\LibraryManagementSystem.dll
@@ -177,3 +176,4 @@ C:\Users\Hurera1011\Desktop\LibraryManagementSystem\LibraryManagementSystem\obj\
 C:\Users\Hurera1011\Desktop\LibraryManagementSystem\LibraryManagementSystem\obj\Debug\net8.0\ref\LibraryManagementSystem.dll
 C:\Users\Hurera1011\Desktop\LibraryManagementSystem\LibraryManagementSystem\bin\Debug\net8.0\Pipelines.Sockets.Unofficial.dll
 C:\Users\Hurera1011\Desktop\LibraryManagementSystem\LibraryManagementSystem\bin\Debug\net8.0\StackExchange.Redis.dll
+C:\Users\Hurera1011\Desktop\LibraryManagementSystem\LibraryManagementSystem\obj\Debug\net8.0\staticwebassets.upToDateCheck.txt

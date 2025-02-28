@@ -17,25 +17,36 @@ namespace LibraryManagementSystem.Service.Implementation
 
         public async Task<User> RegisterUser(UserRegistrationDto userRegistrationDto)
         {
-            if (await _context.Users.AnyAsync(u => u.Email == userRegistrationDto.Email))
+            try
             {
-                throw new Exception("Email is already in use.");
+                if (await _context.Users.AnyAsync(u => u.Email == userRegistrationDto.Email))
+                {
+                    throw new Exception("Email is already in use.");
+                }
+
+                var passwordHash = BCrypt.Net.BCrypt.HashPassword(userRegistrationDto.Password);
+
+                var user = new User
+                {
+                    Email = userRegistrationDto.Email,
+                    PasswordHash = passwordHash,
+                    FirstName = userRegistrationDto.FirstName,
+                    LastName = userRegistrationDto.LastName,
+                    Role = userRegistrationDto.Role,
+                    CreatedAt = DateTime.UtcNow,
+                    RefreshToken = "",
+                    RefreshTokenExpiryTime = DateTime.UtcNow
+                };
+                _context.Users.Add(user);
+                await _context.SaveChangesAsync();
+                return user;
+
             }
-
-            var passwordHash = BCrypt.Net.BCrypt.HashPassword(userRegistrationDto.Password);
-
-            var user = new User
+            catch (Exception ex)
             {
-                Email = userRegistrationDto.Email,
-                PasswordHash = passwordHash,
-                FirstName = userRegistrationDto.FirstName,
-                LastName = userRegistrationDto.LastName,
-                Role = userRegistrationDto.Role,
-                CreatedAt = DateTime.UtcNow
-            };
-            _context.Users.Add(user);
-            await _context.SaveChangesAsync();
-            return user;
+                Console.WriteLine(ex.InnerException?.Message);
+                throw;
+            }
         }
     }
 }

@@ -15,6 +15,7 @@ namespace LibraryManagementSystem.Helper
             services.AddScoped(typeof(ILoanService), typeof(LoanService));
             services.AddScoped(typeof(IMemberService), typeof(MemberService));
             services.AddScoped(typeof(IAuthService), typeof(AuthService));
+            services.AddScoped(typeof(IUserService), typeof(UserService));
            
         }
 
@@ -25,6 +26,7 @@ namespace LibraryManagementSystem.Helper
             services.AddScoped<ICategoryRepository, CategoryRepository>();
             services.AddScoped<ILoanRepository, LoanRepository>();
             services.AddScoped<IMemberRepository, MemberRepository>();
+            services.AddScoped<IUserRepository, UserRepository>();
 
             //services.AddScoped<IBookRepository, BookRepository>();
         }

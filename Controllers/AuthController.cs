@@ -1,4 +1,6 @@
-﻿using LibraryManagementSystem.Data;
+﻿using Azure.Core;
+using LibraryManagementSystem.Data;
+using LibraryManagementSystem.DTO.Auth;
 using LibraryManagementSystem.DTO.User;
 using LibraryManagementSystem.Models;
 using LibraryManagementSystem.Service.Implementation;
@@ -62,9 +64,39 @@ namespace LibraryManagementSystem.Controllers
                 return Unauthorized(new { message = "Invalid email or password" });
             }
 
-            var token = _jwtService.GenerateJwtToken(user);
-            return Ok(new { token, userId = user.UserId, role = user.Role.ToString() });
+            var accessToken = _jwtService.GenerateJwtToken(user);
+            var refreshToken = Guid.NewGuid().ToString();
+
+            user.RefreshToken = refreshToken;
+            user.RefreshTokenExpiryTime = DateTime.UtcNow.AddDays(7);
+            await _context.SaveChangesAsync();
+
+
+            return Ok(new { token = accessToken, refreshToken = refreshToken, userId = user.UserId, role = user.Role.ToString(), result = true });
         }
 
+        [HttpPost("refresh-token")]
+        public async Task<IActionResult> RefreshToken([FromBody] RefreshTokenRequest request)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.RefreshToken == request.RefreshToken);
+            if (user == null || user.RefreshTokenExpiryTime < DateTime.UtcNow)
+            {
+                return Unauthorized(new { message = "Invalid or expired refresh token" });
+            }
+
+            var newAccessToken = _jwtService.GenerateJwtToken(user);
+            var newRefreshToken = Guid.NewGuid().ToString();
+
+            user.RefreshToken = newRefreshToken;
+            user.RefreshTokenExpiryTime = DateTime.UtcNow.AddDays(7);
+            await _context.SaveChangesAsync();
+            return Ok(new { token = newAccessToken, refreshToken = newRefreshToken, userId = user.UserId, role = user.Role.ToString(), result = true });
+
+        }
     }
 }
