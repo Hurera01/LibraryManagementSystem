@@ -4,6 +4,7 @@ using LibraryManagementSystem.Service.Implementation;
 using LibraryManagementSystem.Utility;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.FileProviders;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using StackExchange.Redis;
@@ -79,6 +80,13 @@ builder.Services.AddSwaggerGen(options =>
 });
 
 var app = builder.Build();
+app.UseStaticFiles(); // Enable serving static files like images
+
+app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), "Uploads")),
+    RequestPath = "/uploads" // This makes your files accessible via /uploads/{fileName}
+});
 
 // Use CORS middleware before other middleware
 app.UseCors("AllowAllOrigins"); // Apply CORS policy

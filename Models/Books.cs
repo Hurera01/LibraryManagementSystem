@@ -21,6 +21,10 @@ namespace LibraryManagementSystem.Models
         [Required]
         [MaxLength(50)]
         public string isbn { get; set; }
+        [Required]
+        public int quantity { get; set; }
+        [Required]
+        public string image_url { get; set; }
         public Author Authors { get; set; }
         public ICollection<Book_Category> Book_Categories { get; set; }
         public ICollection<Loans> Loans { get; set; }

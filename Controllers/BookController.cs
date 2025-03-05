@@ -1,5 +1,7 @@
-﻿using LibraryManagementSystem.DTO.Book;
+﻿using LibraryManagementSystem.Data;
+using LibraryManagementSystem.DTO.Book;
 using LibraryManagementSystem.Service.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,14 +12,16 @@ namespace LibraryManagementSystem.Controllers
     public class BookController : ControllerBase
     {
         private readonly IBookService _bookService;
+        private readonly ApplicationDbContext _context;
 
-        public BookController(IBookService bookService)
+        public BookController(IBookService bookService, ApplicationDbContext context)
         {
             _bookService = bookService;
+            _context = context;
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateBook([FromBody] BookDto book)
+        public async Task<IActionResult> CreateBook([FromForm] BookDto book, IFormFile imageFile)
         {
             if (!ModelState.IsValid)
             {
@@ -26,7 +30,7 @@ namespace LibraryManagementSystem.Controllers
 
             try
             {
-                await _bookService.Add(book);
+                await _bookService.Add(book, imageFile);
                 return Ok(new { message = "Book Created Successfully." });
             }
             catch (Exception ex)
@@ -35,6 +39,30 @@ namespace LibraryManagementSystem.Controllers
 
             }
 
+        }
+
+        [HttpDelete]
+        public async Task<IActionResult> DeleteBook(int id)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+                var book = await _context.books.FindAsync(id);
+                if(book != null)
+                {
+                    _context.Remove(book);
+                    _context.SaveChanges();
+                }
+                return Ok(new { message = "Book Deleted Successfully" });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+
+            }
         }
 
         [HttpGet]
@@ -86,6 +114,25 @@ namespace LibraryManagementSystem.Controllers
             {
                 var result = await _bookService.AddMultipleBooks(books);
                 return Ok(new { message = "Added Muliple Books Successfully", data = result });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
+
+        [HttpGet("GetPaginatedBooks")]
+        [Authorize(Roles = "Admin, Librarian")]
+        public async Task<IActionResult> GetPaginatedBooks(int pageNumber, int pageSize)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+                var result = await _bookService.GetPaginatedBooks(pageNumber, pageSize);
+                return Ok(new { Books = result.Books, TotalCount = result.TotalCount });
             }
             catch (Exception ex)
             {

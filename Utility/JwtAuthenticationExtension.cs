@@ -46,9 +46,14 @@ namespace LibraryManagementSystem.Utility
                     {
                         if (!context.Response.HasStarted)
                         {
-                            context.HandleResponse(); 
+                            context.HandleResponse();
                             context.Response.StatusCode = StatusCodes.Status401Unauthorized;
                             context.Response.ContentType = "application/json";
+
+                            // CORS headers for consistency
+                            context.Response.Headers.Append("Access-Control-Allow-Origin", "*");
+                            context.Response.Headers.Append("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+                            context.Response.Headers.Append("Access-Control-Allow-Headers", "Authorization, Content-Type");
 
                             var result = new
                             {
@@ -57,18 +62,18 @@ namespace LibraryManagementSystem.Utility
                             };
 
                             await context.Response.WriteAsJsonAsync(result);
+                            Console.WriteLine("401 Unauthorized - OnChallenge event triggered.");
                         }
                     },
                     OnAuthenticationFailed = async context =>
                     {
-                        if (context.Exception.GetType() == typeof(SecurityTokenExpiredException))
+                        if (context.Exception is SecurityTokenExpiredException)
                         {
                             var response = context.Response;
-                            if (!response.HasStarted) 
+                            if (!response.HasStarted)
                             {
-                                context.Response.Clear(); 
-                                context.Response.StatusCode = StatusCodes.Status401Unauthorized;
-                                context.Response.ContentType = "application/json";
+                                response.StatusCode = StatusCodes.Status401Unauthorized;
+                                response.ContentType = "application/json";
 
                                 response.Headers.Append("Access-Control-Allow-Origin", "*");
                                 response.Headers.Append("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
@@ -80,8 +85,13 @@ namespace LibraryManagementSystem.Utility
                                     message = "Your session has expired. Please log in again."
                                 };
 
-                                await context.Response.WriteAsJsonAsync(result);
+                                await response.WriteAsJsonAsync(result);
+                                Console.WriteLine("401 Unauthorized - Token expired.");
                             }
+                        }
+                        else
+                        {
+                            Console.WriteLine($"Authentication failed: {context.Exception.Message}");
                         }
                     }
                 };

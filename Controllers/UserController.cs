@@ -1,6 +1,7 @@
 ﻿using LibraryManagementSystem.Data;
 using LibraryManagementSystem.DTO.User;
 using LibraryManagementSystem.Service.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -21,6 +22,7 @@ namespace LibraryManagementSystem.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Admin, Librarian")]
         public async Task<IActionResult> GetAllUser(int page, int size)
         {
             try
@@ -68,6 +70,32 @@ namespace LibraryManagementSystem.Controllers
                 return Ok(new { message = "User Deleted Successfully" });
             }
             catch(Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
+
+        [HttpPut]
+        public async Task<IActionResult> updateUser(int userId, [FromBody] UpdateUserDto updateUserDto)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+                var existingUser = _context.Users.FirstOrDefault(u => u.UserId == userId);
+                if (existingUser != null)
+                {
+                    existingUser.FirstName = updateUserDto.FirstName;
+                    existingUser.LastName = updateUserDto.LastName;
+                    existingUser.Email = updateUserDto.Email;
+                    existingUser.Role = updateUserDto.Role;
+                }
+                _context.SaveChanges();
+                return Ok(new { message = "User Update Successfully" });
+            }
+            catch (Exception ex)
             {
                 return StatusCode(500, $"Internal server error: {ex.Message}");
             }

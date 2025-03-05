@@ -215,23 +215,97 @@
         ],
         "requestBody": {
           "content": {
-            "application/json": {
+            "multipart/form-data": {
               "schema": {
-                "$ref": "#/components/schemas/BookDto"
-              }
-            },
-            "text/json": {
-              "schema": {
-                "$ref": "#/components/schemas/BookDto"
-              }
-            },
-            "application/*+json": {
-              "schema": {
-                "$ref": "#/components/schemas/BookDto"
+                "required": [
+                  "author_id",
+                  "genre",
+                  "isbn",
+                  "publish_year",
+                  "quantity",
+                  "Title"
+                ],
+                "type": "object",
+                "properties": {
+                  "Title": {
+                    "type": "string"
+                  },
+                  "author_id": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "genre": {
+                    "type": "string"
+                  },
+                  "publish_year": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "isbn": {
+                    "type": "string"
+                  },
+                  "quantity": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "image_url": {
+                    "type": "string"
+                  },
+                  "imageFile": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                }
+              },
+              "encoding": {
+                "Title": {
+                  "style": "form"
+                },
+                "author_id": {
+                  "style": "form"
+                },
+                "genre": {
+                  "style": "form"
+                },
+                "publish_year": {
+                  "style": "form"
+                },
+                "isbn": {
+                  "style": "form"
+                },
+                "quantity": {
+                  "style": "form"
+                },
+                "image_url": {
+                  "style": "form"
+                },
+                "imageFile": {
+                  "style": "form"
+                }
               }
             }
           }
         },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Book"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "OK"
@@ -314,6 +388,36 @@
             }
           }
         },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Book/GetPaginatedBooks": {
+      "get": {
+        "tags": [
+          "Book"
+        ],
+        "parameters": [
+          {
+            "name": "pageNumber",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "OK"
@@ -462,6 +566,45 @@
             "description": "OK"
           }
         }
+      },
+      "put": {
+        "tags": [
+          "User"
+        ],
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateUserDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateUserDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateUserDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
       }
     },
     "/WeatherForecast": {
@@ -511,6 +654,7 @@
           "genre",
           "isbn",
           "publish_year",
+          "quantity",
           "title"
         ],
         "type": "object",
@@ -534,6 +678,14 @@
           "isbn": {
             "minLength": 1,
             "type": "string"
+          },
+          "quantity": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "image_url": {
+            "type": "string",
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -662,6 +814,36 @@
         ],
         "type": "integer",
         "format": "int32"
+      },
+      "UpdateUserDto": {
+        "required": [
+          "email",
+          "firstName",
+          "lastName",
+          "role"
+        ],
+        "type": "object",
+        "properties": {
+          "email": {
+            "maxLength": 100,
+            "minLength": 1,
+            "type": "string"
+          },
+          "firstName": {
+            "maxLength": 50,
+            "minLength": 1,
+            "type": "string"
+          },
+          "lastName": {
+            "maxLength": 50,
+            "minLength": 1,
+            "type": "string"
+          },
+          "role": {
+            "$ref": "#/components/schemas/Role"
+          }
+        },
+        "additionalProperties": false
       },
       "UserLoginDto": {
         "type": "object",

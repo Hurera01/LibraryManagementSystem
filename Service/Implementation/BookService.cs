@@ -25,9 +25,9 @@ namespace LibraryManagementSystem.Service.Implementation
             _redisCache = redis.GetDatabase();
         }
 
-        public async Task Add(BookDto book)
+        public async Task Add(BookDto book, IFormFile imageFile)
         {
-            await _bookRepository.Add(book);
+            await _bookRepository.Add(book, imageFile);
         }
 
         public Task<int> AddMultipleBooks(List<BookDto> books)
@@ -79,6 +79,11 @@ namespace LibraryManagementSystem.Service.Implementation
                 return book;
             }
             return null;
+        }
+
+        public async Task<GetPaginatedBooksDto> GetPaginatedBooks(int pageNumber, int pageSize)
+        {
+            return await _bookRepository.GetPaginatedBooks(pageNumber, pageSize);
         }
 
         public Task Update(int id, BookDto book)

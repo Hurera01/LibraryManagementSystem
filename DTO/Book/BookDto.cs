@@ -14,5 +14,8 @@ namespace LibraryManagementSystem.DTO.Book
         public int publish_year { get; set; }
         [Required]
         public string isbn { get; set; }
+        [Required]
+        public int quantity { get; set; }
+        public string image_url {  get; set; }
     }
 }
